@@ -5,7 +5,6 @@ let requests = require("requests");
 const homeFile = fs.readFileSync("home.html", "utf-8");
 
 const replaceval = (tempval, orgval) => {
-    console.log(tempval);
     let temperature = (tempval.replace("{%tempval%}", (orgval.main.temp - 273.15).toFixed(2)));
     temperature = (temperature.replace("{%tempmin%}", (orgval.main.temp_min - 273.15).toFixed(2)));
     temperature = (temperature.replace("{%tempmax%}", (orgval.main.temp_max - 273.15).toFixed(2)));
@@ -22,9 +21,8 @@ const server = http.createServer((req, res) => {
             .on('data', (chunk) => {
                 const objdata = JSON.parse(chunk);
                 const arrData = [objdata];
-                console.log(arrData);
-                const realTimeData = arrData.map(val=> replaceval(homeFile, val)).join("");       
-               res.write(realTimeData);
+                const realTimeData = arrData.map(val=> replaceval(homeFile, val)).join("");
+                res.write(realTimeData);
             })
             .on('end', (err) => {
             if (err) return console.log('connection closed due to errors', err);
@@ -32,4 +30,6 @@ const server = http.createServer((req, res) => {
         });
     }
 });
-server.listen(7000, "127.0.0.1")
+server.listen(7000, () => {
+    console.log('Server listening at: http://localhost:7000/');
+})
