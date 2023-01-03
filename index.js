@@ -4,6 +4,8 @@ const fs = require('fs');
 let requests = require("requests");
 const homeFile = fs.readFileSync("home.html", "utf-8");
 
+const port = process.env.PORT || 3000;
+
 const replaceval = (tempval, orgval) => {
     let temperature = (tempval.replace("{%tempval%}", (orgval.main.temp - 273.15).toFixed(2)));
     temperature = (temperature.replace("{%tempmin%}", (orgval.main.temp_min - 273.15).toFixed(2)));
@@ -30,6 +32,6 @@ const server = http.createServer((req, res) => {
         });
     }
 });
-server.listen(7000, () => {
-    console.log('Server listening at: http://localhost:7000/');
+server.listen(port, () => {
+    console.log(`Server listening at: http://localhost:${port}/`);
 })
